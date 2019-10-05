@@ -53,6 +53,9 @@ def find_children(wiki):
 def find_hitler_at(start_page, depth):
 	hitler = "/wiki/Adolf_Hitler"
 
+	# TODO: Do this asynchronously
+	# TODO: Make a graph so that parents can be tracked
+
 	counter = 0
 	page_list = [start_page]
 	if hitler in page_list:
