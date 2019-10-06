@@ -7,8 +7,12 @@ Also, I have never done web scraping before so I thought let's do it now. Hee I 
 ![greentext](greentext.jpg)
 
 ## Installation
-`pip3 install beautifulsoup4`
-`pip3 install grequests`
+```shell
+$ pip3 install beautifulsoup4
+$ pip3 install grequests
+```
 
 ## Run
-`python3 reach.py`
+```shell
+$ python3 reach.py
+```
