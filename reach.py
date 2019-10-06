@@ -1,9 +1,12 @@
 import urllib.request
 from bs4 import BeautifulSoup
+import grequests
 
 # ==========================================
 # INTERNAL
 # ==========================================
+
+base = "https://en.wikipedia.org"
 
 def get_random_wiki():
 	# REALLY BAD FUNCTION
@@ -11,7 +14,6 @@ def get_random_wiki():
 	# EITHER USE HTML PARSER - OVERKILL?
 	# OR MAYBE USE REGEX?
 
-	base = "https://en.wikipedia.org"
 	url = base + "/wiki/Special:Random"
 	res = urllib.request.urlopen(url).read().decode()
 	s = res.find("<link rel=\"canonical\"")
@@ -20,7 +22,6 @@ def get_random_wiki():
 	return res[52:e]
 
 def read_wiki_url(wiki):
-	base = "https://en.wikipedia.org"
 	url = base + wiki
 	res = urllib.request.urlopen(url)
 	return res.read().decode()
@@ -48,7 +49,7 @@ def get_wiki_links(content):
 # ==========================================
 
 def find_children(wiki):
-	return get_wiki_links(get_wiki_content(generate_soup(read_wiki_url(wiki))))
+	return get_wiki_links(get_wiki_content(generate_soup(wiki)))
 
 def find_hitler_at(start_page, depth):
 	hitler = "/wiki/Adolf_Hitler"
@@ -63,7 +64,12 @@ def find_hitler_at(start_page, depth):
 
 	while counter<depth:
 		counter = counter + 1
-		page_list = sum(map(find_children, page_list), [])
+
+		requests = (grequests.get(base + wiki) for wiki in page_list)
+		response = grequests.imap(requests)
+		tmp = map(lambda x: find_children(x.content.decode()), response)
+		page_list = sum(tmp, [])
+
 		if hitler in page_list:
 			return counter
 
@@ -78,7 +84,7 @@ def find_hitler(start_page):
 # ==========================================
 
 start = get_random_wiki()
-print("Starting at: ", start)
+print("Starting at:", start)
 level = find_hitler(start)
 if level >= 0:
 	print("Found at level ", level)
