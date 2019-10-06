@@ -9,7 +9,6 @@ import grequests
 base = "https://en.wikipedia.org"
 
 def get_random_wiki():
-	# REALLY BAD FUNCTION
 	# HOW DO I DO THIS NICELY?
 	# EITHER USE HTML PARSER - OVERKILL?
 	# OR MAYBE USE REGEX?
@@ -20,11 +19,6 @@ def get_random_wiki():
 	res = res[s:]
 	e = res.find("\"/>")
 	return res[52:e]
-
-def read_wiki_url(wiki):
-	url = base + wiki
-	res = urllib.request.urlopen(url)
-	return res.read().decode()
 
 def generate_soup(html_doc):
 	return BeautifulSoup(html_doc, "html.parser")
